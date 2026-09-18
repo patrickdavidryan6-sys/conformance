@@ -32,6 +32,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 // Server command options schema
 export const ServerOptionsSchema = z.object({
   url: z.string().url('Invalid server URL'),
+  proxy: z.string().url('Invalid proxy URL').optional(),
   scenario: z
     .string()
     .refine((scenario) => getClientScenario(scenario) !== undefined, {
@@ -45,6 +46,7 @@ export type ServerOptions = z.infer<typeof ServerOptionsSchema>;
 // Authorization server command options schema
 export const AuthorizationServerOptionsSchema = z.object({
   url: z.string().url('Invalid authorization server URL'),
+  proxy: z.string().url('Invalid proxy URL').optional(),
   scenario: z
     .string()
     .refine(

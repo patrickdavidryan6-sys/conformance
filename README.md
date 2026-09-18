@@ -24,6 +24,9 @@ npx @modelcontextprotocol/conformance server --url http://localhost:3000/mcp
 
 # Run a single scenario
 npx @modelcontextprotocol/conformance server --url http://localhost:3000/mcp --scenario server-initialize
+
+# Route conformance requests through an authenticated HTTP proxy
+npx @modelcontextprotocol/conformance server --url https://mcp.example.com/mcp --proxy 'http://username:password@proxy.example:8080'
 ```
 
 ### List Available Scenarios
@@ -81,6 +84,7 @@ npx @modelcontextprotocol/conformance server --url <url> [--scenario <scenario>]
 **Options:**
 
 - `--url` - URL of the server to test
+- `--proxy <url>` - Route requests through an HTTP(S) proxy. For an authenticated proxy, include URL-encoded credentials in the URL (for example, `http://username:password@proxy.example:8080`). This option is also available on the `authorization` command
 - `--scenario <scenario>` - Test scenario to run (e.g., "server-initialize"). Runs all available scenarios by default
 - `--suite <suite>` - Suite to run: "active" (default; excludes pending and draft-spec scenarios), "all", "draft" (scenarios targeting the in-progress draft spec), or "pending"
 - `--expected-failures <path>` - Path to YAML baseline file of known failures (see [Expected Failures](#expected-failures))
