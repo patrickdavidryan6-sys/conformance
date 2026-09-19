@@ -53,6 +53,7 @@ import { createNewSepCommand } from './new-sep';
 import { createSdkCommand } from './sdk-runner';
 import { createTraceabilityCommand } from './traceability';
 import packageJson from '../package.json';
+import { configureProxy } from './proxy';
 
 // Note on naming: `command` refers to which CLI command is calling this.
 // The `client` command tests Scenario objects (which test clients),
@@ -343,6 +344,10 @@ program
   .description('Run conformance tests against a server implementation')
   .requiredOption('--url <url>', 'URL of the server to test')
   .option(
+    '--proxy <url>',
+    'HTTP(S) proxy URL; include URL-encoded credentials when authentication is required'
+  )
+  .option(
     '--scenario <scenario>',
     'Scenario to test (defaults to active suite if not specified)'
   )
@@ -369,6 +374,10 @@ program
     try {
       // Validate options with Zod
       const validated = ServerOptionsSchema.parse(options);
+
+      if (validated.proxy) {
+        configureProxy(validated.proxy);
+      }
 
       const verbose = options.verbose ?? false;
       const outputDir = options.outputDir;
@@ -521,6 +530,10 @@ program
     'Path to JSON settings file (see examples/authorization-server-settings.example.json)'
   )
   .option('--url <url>', 'URL of the authorization server issuer')
+  .option(
+    '--proxy <url>',
+    'HTTP(S) proxy URL; include URL-encoded credentials when authentication is required'
+  )
   .option('--scenario <scenario>', 'Test scenario to run')
   .option(
     '--client-id <id>',
@@ -581,6 +594,9 @@ program
         )
       };
       const validated = AuthorizationServerOptionsSchema.parse(merged);
+      if (validated.proxy) {
+        configureProxy(validated.proxy);
+      }
       const verbose = options.verbose ?? false;
       const outputDir = options.outputDir;
       const specVersionFilter = options.specVersion
